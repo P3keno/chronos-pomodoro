@@ -1,23 +1,16 @@
-import { Heading } from './components/Heading';
-
 import './styles/theme.css'
 import './styles/global.css'
-import { TimerIcon } from 'lucide-react';
+import { Heading } from './components/Heading'
+import { Container } from './components/Container'
 
 export function App() {
-    return ( 
-    <>
-        <Heading>
-            Olá Mundoo! 
-            <button>
-                <TimerIcon/>
-            </button>
-        </Heading>
-        <p>
-            Eu sou o Fellipe e estou aprendendo react!
-            Obrigado por me apoiar no canal e quero aprender muito 
-            a programar, principalmente next.js
-        </p>
+    return <>
+    <Container>
+        <Heading>LOGO</Heading>
+    </Container>
+
+    <Container>
+        <Heading>MENU</Heading>
+    </Container> 
     </>
-    );
 }
