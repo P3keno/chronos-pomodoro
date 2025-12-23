@@ -1,16 +1,40 @@
 import type { TaskStateModel } from '../../models/TaskStateModel';
 import { TaskActionTypes, type TaskActionModel } from './taskActions';
+import { getNextCycle } from '../../utils/getNextCycle';
+import { formatSecondsToMinutes } from '../../utils/formatSecondsToMinutes';
 
 export function taskReducer(
   state: TaskStateModel,
   action: TaskActionModel,
 ): TaskStateModel {
-  switch(action.type) {
+  switch (action.type) {
     case TaskActionTypes.START_TASK: {
-      return state;
+      const newTask = action.payload;
+      const nextCycle = getNextCycle(state.currentCycle);
+      const secondsRemaining = newTask.duration * 60;
+
+      return {
+        ...state,
+        activeTask: newTask,
+        currentCycle: nextCycle,
+        secondsRemaining,
+        formattedSecondsRemaining: formatSecondsToMinutes(secondsRemaining),
+        task: [...state.task, newTask],
+      };
     }
     case TaskActionTypes.INTERRUPT_TASK: {
-      return state;
+      return {
+        ...state,
+        activeTask: null,
+        secondsRemaining: 0,
+        formattedSecondsRemaining: '00:00',
+        task: state.task.map(task => {
+          if (state.activeTask && state.activeTask.id === task.id) {
+            return { ...task, interruptDate: Date.now() };
+          }
+          return task;
+        }),
+      };
     }
     case TaskActionTypes.RESET_STATE: {
       return state;
